@@ -1,0 +1,31 @@
+<?php
+
+use Illuminate\Support\Facades\Broadcast;
+
+Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
+    return (int) $user->id === (int) $id;
+});
+
+// chỉ tk bằng 1 dc phép lắng nghe channels
+Broadcast::channel('admin.order-status', function ($user) {
+    return $user->role === 1;
+});
+
+// real time cho chat hỗ trợ
+Broadcast::channel('message.{userId}', function ($user, $userId) {
+    return (int) $user->id === (int) $userId;
+});
+
+// Realtime khi xử lý đơn hàng cho user
+Broadcast::channel('orders.{userId}', function ($user, $userId) {
+    return $user->id == $userId;
+});
+
+// Realtime đơn hàng cho admin
+Broadcast::channel('user-order', function ($user) {
+    return $user->role === 1;
+});
+
+Broadcast::channel('order-status.{userId}', function ($user, $userId) {
+    return $user->id == $userId;
+});
